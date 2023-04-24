@@ -174,7 +174,7 @@ html [
       div
         .rounded.border.w-full.m-auto.flex-1.relative.bg-white.border-gray-900.overflow-hidden
          style={[
-          "background-image: url('/img/brick.svg');",
+          "background-image: url('img/brick.svg');",
           'background-size: 50px 50px;',
           'max-width: 475px;',
           'min-height: 250px;',
@@ -187,7 +187,7 @@ html [
         [
           div
             .absolute.bg-contain.bg-center.bg-no-repeat.w-full.h-full
-            style="background-image: url('/img/lobster.svg');"
+            style="background-image: url('img/lobster.svg');"
             []
           div
             .bg-gray-900.relative
@@ -206,7 +206,7 @@ html [
           div
             .m-auto.w-full.h-full.bg-contain.bg-center.bg-no-repeat
             style={[
-              "background-image: url('/img/chef.svg');",
+              "background-image: url('img/chef.svg');",
               "animation: up-down 2s ease-in-out infinite;"
             ]}
           []
@@ -221,7 +221,7 @@ html [
           div
             .bg-contain.bg-center.bg-no-repeat.w-full.h-full
             style={[
-              "background-image: url('/img/boiling.svg');"
+              "background-image: url('img/boiling.svg');"
             ]} []
         ]
         div.absolute.bottom-0.left-0.w-full.z-50.border-t.border-gray-900.overflow-hidden [
