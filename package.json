@@ -1,0 +1,15 @@
+{
+  "name": "scuddle-adom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "adom --dev -r /=index.adom -d src",
+    "build": "adom index.adom -o build/index.html -f -d src --minify"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}

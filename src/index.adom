@@ -1,0 +1,319 @@
+let words = ['gummy','babel','mound','twirl','grasp','loyal','tonic','wreck','sable','yacht','crave','spout','glide','whisk','snore','plush','hinge','cower','vixen','prawn','fable','jolly','knead','dusky','haste','hurry','plume','tryst','brisk','tweak','flair','lurid','gauze','chant','fjord','swoop','jumpy','cleft','siren','fungi','braid','cumin','ember','snarl','latch','shale','niche','wrack','spree','table']
+let keyRows = [
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+  ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+]
+let maxTries = 10
+let version = 1
+
+let person = {
+  name: [['Bob']],
+  age: 300
+}
+
+let state = {
+  version: version,
+  current: 0,
+  word: words[0],
+  wins: 0,
+  loses: 0,
+  gameover: false,
+  guessed: {
+    right: ['', '', '', '', ''],
+    wrong: []
+  }
+}
+
+const baseStyles = "flex-1 h-14 border flex justify-center items-center capitalize font-bold rounded-lg border-gray-900"
+const rightStyles = "bg-green-600 border-gray-900 text-white pointer-events-none"
+const wrongStyles = "bg-red-400 border-gray-900 text-white pointer-events-none"
+
+---
+// Component Did Mount
+const savedState = window.localStorage.getItem('state')
+const parsed = JSON.parse(savedState)
+
+if (parsed?.version === version) {
+  state = { ...parsed }
+  console.log(state)
+}
+
+const saveData = () => {
+  const stateStr = JSON.stringify(state)
+  window.localStorage.setItem('state', stateStr)
+}
+
+const newGame = () => {
+  if (state.current >= 51) return
+
+  const newState = { ...state }
+  newState.current += 1
+  newState.word = words[newState.current]
+  newState.gameover = false
+  newState.guessed = {
+    right: ['', '', '', '', ''],
+    wrong: [],
+  }
+
+  state = { ...newState }
+  saveData()
+  $sync()
+}
+
+const checkLetter = (letter) => {
+  const secretWord = words[state.current]
+  const newState = { ...state }
+  const { guessed } = state
+
+  // If the submitted letter exists in the secret word, push each instance of it to the correct letter bank
+  // Otherwise, push it to the wrong letter bank
+  if (secretWord.includes(letter)) {
+    const secretLetters = secretWord.split('')
+    secretLetters.forEach((l, i) => {
+      if (letter === l) {
+        guessed.right[i] = letter // just accounting for double letters in a word
+      } 
+    })
+  } else {
+    guessed.wrong.push(letter)
+  }
+
+  // Check for win and lose conditions
+  let wordGuessed = false
+  let tooManyTries = false
+
+  if (guessed.wrong.length >= maxTries) tooManyTries = true
+  if (!guessed.right.includes('')) wordGuessed = true
+  if (tooManyTries || wordGuessed) {
+    if (tooManyTries) newState.loses += 1
+    if (wordGuessed) newState.wins += 1
+    newState.gameover = true
+  } 
+
+  state = { ...newState }
+  saveData()
+  $sync()
+}
+
+---
+
+html [
+  head [
+    meta charset="UTF-8" []
+    meta name="viewport" content="width=device-width, initial-scale=1" []
+    title 'Scuddl'
+    script src='https://cdn.tailwindcss.com' []
+    style ["""
+      html, body {
+        overflow: hidden;
+        background: rgba(255, 240, 229, 1);
+        min-height: 100%;
+        height: 100%;
+      }
+
+      @keyframes up-down {
+        0%, 100% {
+          transform: translate(0%, -40%);
+        }
+        50% {
+          transform: translate(0%, -50%);
+        }
+      }
+
+      .square {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .front, .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+
+      .front {
+        z-index: 2;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+      }
+
+      .square.flipped {
+        transform: rotateY(180deg);
+      }
+    """]
+  ]
+  body [
+    div
+      root
+      class="flex flex-col m-auto px-3"
+      style="height: calc(100vh - 115px); min-height: 605px; max-height: 825px; max-width: 475px;"
+    [
+      div class="py-2 m-auto w-full flex justify-between" style="height: 40px" [
+        div class="flex items-center" [
+          span class="pr-3" ["Scuddl"]
+          div class="flex-1 flex justify-center" [
+            span ["🦞 x {{state.current + 1}} / {{words.length}}"]
+          ]
+        ]
+        div class="flex-1 flex gap-2 justify-end" [
+          span ["🎉 x {{state.wins}}"]
+          span ["💀 x {{state.loses}}"]
+        ]
+      ]
+      div
+        .rounded.border.w-full.m-auto.flex-1.relative.bg-white.border-gray-900.overflow-hidden
+         style={[
+          "background-image: url('/img/brick.svg');",
+          'background-size: 50px 50px;',
+          'max-width: 475px;',
+          'min-height: 250px;',
+          'max-height: 450px;'
+        ]}
+      [ 
+        div
+          .transition-all.duration-500.m-auto.relative.transform.rotate-180.z-40.flex.justify-center
+          style="width: 20%; height: 20%; top: {{ state.guessed.wrong.length * (75 / maxTries) }}%;"
+        [
+          div
+            .absolute.bg-contain.bg-center.bg-no-repeat.w-full.h-full
+            style="background-image: url('/img/lobster.svg');"
+            []
+          div
+            .bg-gray-900.relative
+            style={[
+              "height: 1000px;",
+              "width: 3px;",
+              "bottom: -80%;",
+              "z-index: -1;"
+            ]}
+            []
+        ]
+        div
+          .absolute.bottom-0.w-full.z-30
+          style='height: 25%;'
+        [
+          div
+            .m-auto.w-full.h-full.bg-contain.bg-center.bg-no-repeat
+            style={[
+              "background-image: url('/img/chef.svg');",
+              "animation: up-down 2s ease-in-out infinite;"
+            ]}
+          []
+        ]
+        div
+          .absolute.w-full.z-50
+          style={[
+            "height: 25%;",
+            "bottom: -10px;"
+          ]}
+        [
+          div
+            .bg-contain.bg-center.bg-no-repeat.w-full.h-full
+            style={[
+              "background-image: url('/img/boiling.svg');"
+            ]} []
+        ]
+        div.absolute.bottom-0.left-0.w-full.z-50.border-t.border-gray-900.overflow-hidden [
+          div.py-1.relative.overflow-hidden [
+            div
+              .absolute.left-0.h-2.w-full.overflow-hidden.top-0
+              style="background: #FFDD09;"
+            [
+              div
+                .transition-transform.duration-500.absolute.top-0.left-0.h-2.w-full.bg-red-600
+                style={[
+                  "margin-top: 0px;",
+                  "transform: translateX(-{{100 - state.guessed.wrong.length * (100 / maxTries)}}%);"
+                ]}
+              []
+            ]
+          ]
+        ]
+      ]
+      div
+        .flex.gap-1.py-9.justify-center.m-auto.w-full
+      [
+        if (state.guessed) [
+          each (letter, i in state.guessed.right) [
+            div
+              .square.h-16.flip.rounded-lg
+              class="{{ state.guessed.right[i] == state.word[i] || state.gameover ? 'flipped' : '' }}"
+            [
+              div
+                .front.text-2xl.flex.border.border-gray-900.justify-center.items-center.rounded-lg.font-bold.bg-white
+                "?"
+              div
+                .back.flex.justify-center.items-center.capitalize.font-bold.text-3xl.border.rounded-lg.transition-all.duration-300 
+                class="{{ state.guessed.right[i] == state.word[i] || state.gameover ? (state.guessed.right[i] == state.word[i] ? 'bg-green-600 border-gray-900 text-white' : 'bg-red-700 border-gray-900 text-white') : 'bg-white border border-gray-900' }}"
+              [
+                "{{ state.gameover ? state.word[i] : letter }}"
+              ]
+            ]
+          ]
+        ]
+      ]
+      div
+        .m-auto.w-full.relative.overflow-hidden
+        style="height: 216px;"
+      [
+        div
+          .flex.flex-col.gap-1.absolute.w-full.transition-all.duration-500
+          style={[
+            "webkit-mask-image: -webkit-radial-gradient(white, black);",
+            "webkit-backface-visibility: hidden;",
+            "height: 475px;",
+            "transform: translateY({{state.gameover ? '100%' : '0%'}});"
+          ]}
+        [
+          each (row, adx in keyRows) [
+            div.gap-1.flex [
+              each (letter, bdx in row) [
+                if ((state.guessed.wrong filter -> _1 == letter).length) [
+                  button
+                    on:click="checkLetter(letter)"
+                    class="{{ baseStyles }} {{ wrongStyles }}"
+                    "{{ letter }}"
+                ] else if ((state.guessed.right filter -> _1 == letter).length) [
+                  button
+                    on:click="checkLetter(letter)"
+                    class="{{ baseStyles }} {{ rightStyles }}"
+                    "{{ letter }}"
+                ] else [
+                  button
+                    on:click="checkLetter(letter)"
+                    class="{{ baseStyles }} bg-white"
+                    "{{ letter }}"
+                ]
+              ]
+            ]
+          ]
+        ]
+        div
+          .transition-all.absolute.w-full.duration-500
+          style={[
+            "webkit-mask-image: -webkit-radial-gradient(white, black);",
+            "webkit-back-face-visibility: hidden;",
+            "height: 475px;",
+            "transform: translateY({{state.gameover ? '0%' : '100%'}});"
+          ]}
+        [
+          button
+            .border.border-gray-900.px-7.py-5.m-auto.rounded-lg.block.mt-6.bg-white
+            on:click="newGame()"
+            "Play Again?"
+        ]
+      ]
+    ]
+  ]
+]
