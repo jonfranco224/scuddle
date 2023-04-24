@@ -1,0 +1,49 @@
+html,
+body {
+  overflow: hidden;
+  background: rgba(255, 240, 229, 1);
+  min-height: 100%;
+  height: 100%;
+}
+
+@keyframes up-down {
+  0%,
+  100% {
+    transform: translate(0%, -40%);
+  }
+  50% {
+    transform: translate(0%, -50%);
+  }
+}
+
+.square {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.3s ease-in-out;
+}
+
+.front,
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.front {
+  z-index: 2;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.square.flipped {
+  transform: rotateY(180deg);
+}
