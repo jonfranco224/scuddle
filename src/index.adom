@@ -104,7 +104,7 @@ html [
     meta name="viewport" content="width=device-width, initial-scale=1" []
     title 'Scuddl'
     script src='https://cdn.tailwindcss.com' []
-    style ["""
+    style """
       html, body {
         overflow: hidden;
         background: rgba(255, 240, 229, 1);
@@ -151,7 +151,7 @@ html [
       .square.flipped {
         transform: rotateY(180deg);
       }
-    """]
+    """
   ]
   body [
     div
@@ -163,12 +163,12 @@ html [
         div class="flex items-center" [
           span class="pr-3" ["Scuddl"]
           div class="flex-1 flex justify-center" [
-            span ["🦞 x {{state.current + 1}} / {{words.length}}"]
+            span "🦞 x {{state.current + 1}} / {{words.length}}"
           ]
         ]
         div class="flex-1 flex gap-2 justify-end" [
-          span ["🎉 x {{state.wins}}"]
-          span ["💀 x {{state.loses}}"]
+          span "🎉 x {{state.wins}}"
+          span "💀 x {{state.loses}}"
         ]
       ]
       div
@@ -248,7 +248,7 @@ html [
           each (letter, i in state.guessed.right) [
             div
               .square.h-16.flip.rounded-lg
-              class="{{ state.guessed.right[i] == state.word[i] || state.gameover ? 'flipped' : '' }}"
+              class={state.guessed.right[i] == state.word[i] || state.gameover ? 'flipped' : ''}
             [
               div
                 .front.text-2xl.flex.border.border-gray-900.justify-center.items-center.rounded-lg.font-bold.bg-white
