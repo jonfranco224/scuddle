@@ -40,6 +40,10 @@ export tag App [
     console.log(state)
   }
 
+  window.addEventListener('keypress', (e) => {
+    checkLetter(e.key)
+  })
+
   const saveData = () => {
     const stateStr = JSON.stringify(state)
     window.localStorage.setItem('state', stateStr)
