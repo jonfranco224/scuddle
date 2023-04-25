@@ -1,5 +1,5 @@
 export tag App [
-  let words = ['gummy','babel','mound']
+  let words = ['gummy','babel','mound','twirl','grasp','loyal','tonic','wreck','sable','yacht','crave','spout','glide','whisk','snore','plush','hinge','cower','vixen','prawn','fable','jolly','knead','dusky','haste','hurry','plume','tryst','brisk','tweak','flair','lurid','gauze','chant','fjord','swoop','jumpy','cleft','siren','fungi','braid','cumin','ember','snarl','latch','shale','niche','wrack','spree','table']
   let keyRows = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
     ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
