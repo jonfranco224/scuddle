@@ -6,7 +6,7 @@ export tag App [
     ['z', 'x', 'c', 'v', 'b', 'n', 'm']
   ]
   let maxTries = 10
-  let version = 1
+  let version = 2
 
   let person = {
     name: [['Bob']],
@@ -15,6 +15,7 @@ export tag App [
 
   let state = {
     version: version,
+    indices: [],
     current: 0,
     word: words[0],
     wins: 0,
@@ -49,11 +50,22 @@ export tag App [
     window.localStorage.setItem('state', stateStr)
   }
 
-  const newGame = () => {
-    if (state.current >= 51) return
+  const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[array[i], array[j]] = [array[j], array[i]]
+    }
+    return array
+  }
 
+  const newGame = () => {
     const newState = { ...state }
-    newState.current += 1
+
+    if (newState.indices.length === 0) {
+      newState.indices = shuffle(words.map((_, i) => i))
+    }
+
+    newState.current = newState.indices.pop()
     newState.word = words[newState.current]
     newState.gameover = false
     newState.guessed = {
@@ -100,6 +112,8 @@ export tag App [
     saveData()
     $sync()
   }
+
+  newGame()
 
   ---
 
