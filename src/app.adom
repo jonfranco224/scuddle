@@ -43,7 +43,7 @@ export tag App [
   const totalLetters = [...keyRows[0], ...keyRows[1], ...keyRows[2]]
 
   window.addEventListener('keypress', (e) => {
-    const letter = e.key
+    const letter = e.key.toLowerCase()
 
     if (state.gameover && e.keyCode === 13) {
       newGame()
