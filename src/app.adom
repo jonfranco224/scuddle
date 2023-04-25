@@ -8,11 +8,6 @@ export tag App [
   let maxTries = 10
   let version = 1
 
-  let person = {
-    name: [['Bob']],
-    age: 300
-  }
-
   let state = {
     version: version,
     indices: [],
