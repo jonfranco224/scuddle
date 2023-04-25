@@ -6,7 +6,7 @@ export tag App [
     ['z', 'x', 'c', 'v', 'b', 'n', 'm']
   ]
   let maxTries = 10
-  let version = 2
+  let version = 1
 
   let person = {
     name: [['Bob']],
