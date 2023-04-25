@@ -40,8 +40,18 @@ export tag App [
     console.log(state)
   }
 
+  const totalLetters = [...keyRows[0], ...keyRows[1], ...keyRows[2]]
+
   window.addEventListener('keypress', (e) => {
-    checkLetter(e.key)
+    const letter = e.key
+
+    if (state.gameover && e.keyCode === 13) {
+      newGame()
+    }
+    
+    if (totalLetters.includes(letter) && !state.guessed.wrong.includes(letter)) {
+      checkLetter(letter)
+    }
   })
 
   const saveData = () => {
