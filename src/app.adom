@@ -144,6 +144,7 @@ export tag App [
   [ 
     div
       .transition-all.duration-500.m-auto.relative.transform.rotate-180.z-40.flex.justify-center
+      class="w-[50px]"
       style="width: 20%; height: 20%; top: {{ state.guessed.wrong.length * (75 / maxTries) }}%;"
     [
       div
@@ -239,6 +240,7 @@ export tag App [
       style={[
         "webkit-mask-image: -webkit-radial-gradient(white, black);",
         "webkit-backface-visibility: hidden;",
+        "backface-visibility: hidden;",
         "height: 475px;",
         "transform: translateY({{state.gameover ? '100%' : '0%'}});"
       ]}

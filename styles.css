@@ -34,10 +34,11 @@ body {
   backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  transform: translateX(0);
 }
 
 .front {
-  z-index: 2;
+  z-index: 3;
 }
 
 .back {
