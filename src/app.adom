@@ -248,12 +248,12 @@ export tag App [
       each (row, adx in keyRows) [
         div.gap-1.flex [
           each (letter, bdx in row) [
-            if ((state.guessed.wrong filter -> _1 == letter).length) [
+            if (state.guessed.wrong | includes letter) [
               button
                 on:click="checkLetter(letter)"
                 class="{{ baseStyles }} {{ wrongStyles }}"
                 "{{ letter }}"
-            ] else if ((state.guessed.right filter -> _1 == letter).length) [
+            ] else if (state.guessed.right | includes letter) [
               button
                 on:click="checkLetter(letter)"
                 class="{{ baseStyles }} {{ rightStyles }}"

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "adom --dev -r /=index.adom -d src",
     "build": "adom index.adom -o index.html -f -d src --minify"
   },
